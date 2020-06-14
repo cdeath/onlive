@@ -1,37 +1,30 @@
-import React from 'react';
-import Svg from '../components/Svg';
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import Svg from 'components/Svg';
 import styles from 'assets/css/Header.module.css';
+import { classNames } from 'utils';
 
-class Intro extends React.Component {
-	showMenu() {
-		document.querySelector('header nav').classList.toggle('reveal');
-	}
-
-	render() {
-		return (
-			<header id={styles.header}>
-				<a href="/" id={styles.logo}>
-					<Svg href={'#logo-svg'} />
-				</a>
-				<div className={styles.buttons}>
-					<button id={styles.menu} onClick={this.showMenu}>
-						<Svg href={'#i-menu-open-svg'} />
-					</button>
-					<a id={styles.search} href="/search/">
-						<Svg href={'#i-search-svg'} />
-					</a>
-				</div>
-				<nav id={styles.nav}>
-					{/* <a href="/home" className="selected">
-						Concerts
-					</a> */}
-					<a href="/home">Concerts</a>
-					<a href="/about/">About</a>
-					<a href="/arena/">Enter Arena</a>
-				</nav>
-			</header>
-		);
-	}
+export default () => { 
+	const [nav, toggleNav] = useState(false);
+	return <header id={styles.header}>
+		<Link to="/" id={styles.logo}>
+			<Svg href="#logo-svg" />
+		</Link>
+		<div className={styles.buttons}>
+			<button id={styles.menu} onClick={() => toggleNav(!nav)}>
+				<Svg href="#i-menu-open-svg" />
+			</button>
+			<Link to="/search/" id={styles.search}>
+				<Svg href="#i-search-svg" />
+			</Link>
+		</div>
+		<nav id={styles.nav} className={classNames({reveal: nav})}>
+			{/* <NavLink to="/home" className="selected">Concerts</NavLink> */}
+			<NavLink to="/home">Concerts</NavLink>
+			<NavLink to="/about/">About</NavLink>
+			<NavLink to="/arena/">Enter Arena</NavLink>
+		</nav>
+	</header>;
 }
 
 export default Intro;

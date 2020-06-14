@@ -49,7 +49,7 @@ class Checkout extends React.Component {
 			<div id="home">
 				<Header />
 				<main className="top">
-					<Background concert={this.state.concert} />
+					<Background src={this.state.concert.img} alt={this.state.concert.title} />
 					<section id={styles.highlight}>
 						<Slide concert={this.state.concert} />
 					</section>

@@ -1,14 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from 'assets/css/Link.module.css';
+import { classNames } from 'utils';
 
-class Link extends React.Component {
-	render() {
-		return (
-			<a href={this.props.href} className={styles.link}>
-				{this.props.label}
-			</a>
-		);
-	}
-}
-
-export default Link;
+export default ({ href, children, className, ...props }) => <Link {...props} to={href} className={classNames(styles.link, className)}>
+	{children}
+</Link>;

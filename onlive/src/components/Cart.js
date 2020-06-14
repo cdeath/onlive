@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { api_url } from 'config';
 import Button from 'components/Button';
 import styles from 'assets/css/Cart.module.css';
+import { classNames } from 'utils';
 
 export default ({ concert, defaultPrice, className, ...props }) => {
 
@@ -27,9 +28,7 @@ export default ({ concert, defaultPrice, className, ...props }) => {
 		e.preventDefault();
 		const res = await fetch(`${api_url}insertTicket.php/`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(state),
 		});
 		if (!res.ok) {
@@ -55,9 +54,9 @@ export default ({ concert, defaultPrice, className, ...props }) => {
 					Remember that you will only pay for this ticket if the concert happens. We will send you the entry code to
 					30 minutes before the concert starts. This code is valid for one entrance only.
 				</span>
-				<Button label="next" size={2} />
+				<Button size={2}>next</Button>
 			</form>
-			<div className={`${styles.result} ${state.classNames.result}`}>
+			<div className={classNames(styles.result, state.classNames.result)}>
 				<h2>The band says thanks</h2>
 				<h3>{concert.band_msg}</h3>
 				<p>- {concert.band_sign}</p>

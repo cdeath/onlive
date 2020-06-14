@@ -10,3 +10,7 @@ export function classNames(...rest) {
 export function padStart(str = '', len = 0, char = '0') {
     return `${Array(Math.max(0, len - str.toString().length)).fill(char).join('')}${str}`;
 }
+
+export function monthName(month = 0) {
+    return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][month];
+}
