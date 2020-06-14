@@ -3,14 +3,13 @@ import { api_url } from 'config';
 import Button from 'components/Button';
 import styles from 'assets/css/Cart.module.css';
 
-export default props => {
+export default ({ concert, defaultPrice, className, ...props }) => {
 
-	if (!props.concert) return '';
+	if (!concert) return '';
 
 	const [state, setState] = useState({
-		concert_id: props.concert.id,
-		defaultPrice: props.defaultPrice,
-		price: props.defaultPrice,
+		concert_id: concert.id,
+		price: defaultPrice,
 		quantity: 1,
 		name: '',
 		email: '',
@@ -21,7 +20,7 @@ export default props => {
 	});
 
 	function updatePrice({ target: { value }}) {
-		setState({ ...state, quantity: value, price: state.defaultPrice * value });
+		setState({ ...state, quantity: value, price: defaultPrice * value });
 	}
 
 	async function sendForm(e) {
@@ -41,7 +40,7 @@ export default props => {
 		setState({ ...state, classNames: { form: 'hide', result: '' }});
 	};
 
-	return <div id={styles.cart} className={styles.tabContent}>
+	return <div {...props} id={styles.cart} className={classNames(styles.tabContent, className)}>
 		<div className={styles.card}>
 			<form onSubmit={sendForm} className={state.classNames.form}>
 				<label htmlFor="quantity">Tickets Wanted</label>
@@ -56,7 +55,7 @@ export default props => {
 					Remember that you will only pay for this ticket if the concert happens. We will send you the entry code to
 					30 minutes before the concert starts. This code is valid for one entrance only.
 				</span>
-				<Button type="button" label="next" size={2} />
+				<Button label="next" size={2} />
 			</form>
 			<div className={`${styles.result} ${state.classNames.result}`}>
 				<h2>The band says thanks</h2>
