@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Card from '../components/Card';
 import Svg from '../components/Svg';
-import styles from '../assets/css/Search.module.css';
+import styles from 'assets/css/Search.module.css';
 
 class Checkout extends React.Component {
 	constructor(props) {

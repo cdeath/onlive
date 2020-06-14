@@ -4,7 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Status from './Status';
 import Button from '../components/Button';
-import styles from '../assets/css/Slide.module.css';
+import styles from 'assets/css/Slide.module.css';
 
 class Slideshow extends React.Component {
 	render() {

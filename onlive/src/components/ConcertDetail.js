@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../components/Button';
-import styles from '../assets/css/ConcertDetail.module.css';
+import styles from 'assets/css/ConcertDetail.module.css';
 
 class ConcertDetail extends React.Component {
 	render() {

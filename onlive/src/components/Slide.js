@@ -1,6 +1,6 @@
 import React from 'react';
 import Status from './Status';
-import styles from '../assets/css/Slide.module.css';
+import styles from 'assets/css/Slide.module.css';
 
 class Highlight extends React.Component {
 	render() {

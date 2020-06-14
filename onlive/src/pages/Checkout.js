@@ -5,7 +5,7 @@ import Slide from '../components/Slide';
 import Cart from '../components/Cart';
 import Footer from '../components/Footer';
 import Config from '../config';
-import styles from '../assets/css/Misc.module.css';
+import styles from 'assets/css/Misc.module.css';
 
 class Checkout extends React.Component {
 	constructor(props) {

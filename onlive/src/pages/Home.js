@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import Slideshow from '../components/Slideshow';
 import ContentList from '../components/ContentList';
 import Footer from '../components/Footer';
-import styles from '../assets/css/Misc.module.css';
+import styles from 'assets/css/Misc.module.css';
 
 class Home extends React.Component {
 	render() {

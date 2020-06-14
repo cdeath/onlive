@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg from '../components/Svg';
-import styles from '../assets/css/Header.module.css';
+import styles from 'assets/css/Header.module.css';
 
 class Intro extends React.Component {
 	showMenu() {

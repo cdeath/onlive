@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '../components/Card';
-import styles from '../assets/css/ContentList.module.css';
+import styles from 'assets/css/ContentList.module.css';
 
 class ContentList extends React.Component {
 	render() {

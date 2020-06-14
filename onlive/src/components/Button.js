@@ -1,48 +1,18 @@
 import React from 'react';
-import styles from '../assets/css/Button.module.css';
+import styles from 'assets/css/Button.module.css';
 
-class Button extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			size: this.props.size,
-			style: styles.btn
-		};
-	}
+export default props => {
+	const className = {
+		1: styles.btnSm,
+		2: styles.btn,
+		3: styles.btnLg,
+	}[props.size || 2];
 
-	componentDidMount() {
-		this.checkSize();
-	}
-
-	checkSize() {
-		if (this.props.size === 1) {
-			this.setState({ style: styles.btnSm });
-		}
-		if (this.props.size === 2) {
-			this.setState({ style: styles.btn });
-		}
-		if (this.props.size === 3) {
-			this.setState({ style: styles.btnLg });
-		}
-	}
-
-	render() {
-		if (this.props.type === 'button' || !this.props.type) {
-			return (
-				<button onClick={this.props.onClick} className={this.state.style}>
-					{this.props.label}
-				</button>
-			);
-		}
-
-		if (this.props.type === 'link') {
-			return (
-				<a href={this.props.href} className={this.state.style}>
-					{this.props.label}
-				</a>
-			);
-		}
-	}
-}
-
-export default Button;
+	return props.type === 'link' ?
+		<a href={props.href || '#'} onClick={props.onClick ? e => { e.preventDefault(); props.onClick(); } : null} className={className}>
+			{props.label}
+		</a> :
+		<button onClick={props.onClick} className={className}>
+			{props.label}
+		</button>;
+};

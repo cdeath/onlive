@@ -5,7 +5,7 @@ import Slide from '../components/Slide';
 import ConcertDetail from '../components/ConcertDetail';
 import Footer from '../components/Footer';
 import Config from '../config';
-import styles from '../assets/css/Misc.module.css';
+import styles from 'assets/css/Misc.module.css';
 
 class Concert extends React.Component {
 	constructor(props) {
