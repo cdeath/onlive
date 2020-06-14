@@ -59,8 +59,8 @@ export default ({ concert, defaultPrice, className, ...props }) => {
 			</form>
 			<div className={`${styles.result} ${state.classNames.result}`}>
 				<h2>The band says thanks</h2>
-				<h3>{props.concert.band_msg}</h3>
-				<p>- {props.concert.band_sign}</p>
+				<h3>{concert.band_msg}</h3>
+				<p>- {concert.band_sign}</p>
 			</div>
 		</div>
 	</div>;

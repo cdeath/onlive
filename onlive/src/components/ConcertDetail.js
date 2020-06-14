@@ -20,7 +20,7 @@ export default ({ prices, concert, className, ...props }) => prices ?
 	</div>
 	<div className={styles.about}>
 		<h2>About</h2>
-		<p>{this.props.concert.text}</p>
+		<p>{concert.text}</p>
 	</div>
 </div> :
 '';
