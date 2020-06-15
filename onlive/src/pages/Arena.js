@@ -1,199 +1,141 @@
-import React from 'react';
-import Footer from '../components/Footer';
-import Background from '../components/Background';
-import Button from '../components/Button';
-import Link from '../components/Link';
-import Svg from '../components/Svg';
-import Config from '../config';
+import React, { useState, useEffect } from 'react';
+import Footer from 'components/Footer';
+import Background from 'components/Background';
+import Button from 'components/Button';
+import Link from 'components/Link';
+import Svg from 'components/Svg';
+import { api_url } from 'config';
+import { classNames } from 'utils';
 
-class Arena extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			concert: {},
-			comments: []
-		};
+export default () => {
 
-		this.checkTicket = this.checkTicket.bind(this);
-		this.sendComment = this.sendComment.bind(this);
-		this.getComments = this.getComments.bind(this);
+	const [state, setState] = useState({
+		concert: {},
+		comments: [],
+		access: true,
+		stage: false,
+		comment: '',
+		code: '',
+	});
+
+	function onChange({ target: { name, value }}) {
+		setState({ ...state, [name]:  value });
 	}
 
-	componentDidMount() {
-		this.checkCookie();
+	async function getComments() {
+		// console.log(`${api_url}getComments.php?id=${concert.id}`);
+		const res = await fetch(`${api_url}getComments.php?id=${state.concert.id}`);
+		setState({ ...state, comments: res.json() });
 	}
 
-	checkCookie() {
-		var access = document.cookie;
-		var link = access.split('a=').pop();
-		// @ https://stackoverflow.com/questions/3568921/how-to-remove-part-of-a-string
-
-		if (!link) {
-			return '';
-		}
-
-		fetch(Config.api_url + 'getConcertByCookie.php?cookie=' + link)
-			.then((response) => {
-				return response.json();
-			})
-			.then((json) => {
-				this.setState({ concert: json });
-				// console.log(this.state.concert);
-				document.querySelector('#access').classList.add('hide');
-				document.querySelector('#stage').classList.remove('hide');
-			})
-			.then(() => {
-				this.getComments();
-			});
-	}
-
-	checkTicket(e) {
+	async function sendComment(e) {
 		e.preventDefault();
-
-		const ticket = document.querySelector('#code').value;
-
-		fetch(Config.api_url + 'getTicket.php?code=' + ticket)
-			.then((response) => {
-				return response.json();
-			})
-			.then((json) => {
-				if (json != null) {
-					this.setState({ concert: json });
-					document.querySelector('#access').classList.add('hide');
-					document.querySelector('#stage').classList.remove('hide');
-
-					// set a cookie to acess the stage
-					// https://www.w3schools.com/js/js_cookies.asp
-					var now = new Date();
-					var time = now.getTime();
-					time += 3600 * 1000;
-					now.setTime(time);
-					document.cookie = 'a=' + this.state.concert.link + '; expires=' + now.toUTCString() + '; path=/';
-				} else {
-					alert('Sorry! Invalid code.');
-					// por falta de tempo fica só um alerta e não uma msg no DOM
-				}
-			})
-			.then(() => {
-				let data = { id: this.state.concert.ticket_id };
-				fetch(Config.api_url + 'updateCode.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(data)
-				}).catch((error) => console.error('OOPS: ' + error));
-			})
-			.then(this.getComments);
-	}
-
-	getComments() {
-		console.warn(Config.api_url + 'getComments.php?id=' + this.state.concert.id);
-		fetch(Config.api_url + 'getComments.php?id=' + this.state.concert.id)
-			.then((response) => {
-				return response.json();
-			})
-			.then((json) => {
-				this.setState({ comments: json });
-			});
-	}
-
-	sendComment(e) {
-		var val = document.querySelector('#my-comment').value;
-
-		if (val === '') {
-			return '';
-		}
-		e.preventDefault();
-		let data = {
-			concert_id: this.state.concert.id,
-			comment: document.querySelector('#my-comment').value,
-			photo: 'wolf.jpg',
-			name: 'Wolf'
-		};
-
-		fetch(Config.api_url + 'insertComment.php', {
+		if (!state.comment) return;
+		await fetch(`${api_url}insertComment.php`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		}).then((response) => {
-			if (!response.ok) {
-				throw Error('Data sent - Network response NOT OK');
-			} else {
-				console.log('Data sent - Network response OK');
-			}
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				concert_id: concert.id,
+				comment: document.querySelector('#my-comment').value,
+				photo: 'wolf.jpg',
+				name: 'Wolf'
+			}),
 		});
-		this.getComments();
-		document.querySelector('#my-comment').value = '';
+		getComments();
+		setState({ ...state, comment: '' });
 	}
 
-	render() {
-		return (
-			<div>
-				<main>
-					<Background />
-					<section id="arena">
-						<div id="access">
-							<Svg href={'#logo-svg'} />
-							<h1>Arena</h1>
-							<p>Enter your ticket code to access the live concert</p>
-							<form onSubmit={this.checkTicket}>
-								<input type="text" name="code" id="code" placeholder="ticket code" />
-								<Button type={'button'} size={2} label={'Enter'} />
-							</form>
-							<br />
-							<Link href={'/.'} label={'website'} />
+	async function checkCookie() {
+		const link = document.cookie.split('a=').pop();
+		if (!link) return;
+		const res = await fetch(`${api_url}getConcertByCookie.php?cookie=${link}`);
+		setState({ ...state, concert: res.json(), access: false, stage: true });
+		getComments();
+	}
+
+	async function checkTicket(e) {
+		e.preventDefault();
+		const res = await fetch(`${api_url}getTicket.php?code=${state.code}`);
+		if (res.json) {
+			setState({ ...state, concert: res.json, access: false, stage: true });
+			document.cookie = `a=${state.concert.link}; expires=${(+new Date() + 36e5).toUTCString()}; path=/`;
+		} else {
+			alert('Sorry! Invalid code.');
+		}
+	}
+
+	async function updateCode() {
+		await fetch(`${api_url}updateCode.php`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ id: state.concert.ticket_id }),
+		}).catch((error) => console.error('OOPS: ' + error));
+	}
+
+	useEffect(() => {
+		checkCookie();
+	}, []);
+
+	useEffect(() => {
+		updateCode();
+		getCommments();
+	}, [state.concert.id]);
+
+	return <div>
+		<main>
+			<Background />
+			<section id="arena">
+				<div id="access" className={classNames({ hide: state.access })}>
+					<Svg href="#logo-svg" />
+					<h1>Arena</h1>
+					<p>Enter your ticket code to access the live concert</p>
+					<form onSubmit={checkTicket}>
+						<input type="text" name="code" id="code" placeholder="ticket code" value={state.code} onChange={onChange} />
+						<Button size={2}>Enter</Button>
+					</form>
+					<br />
+					<Link href={'/.'} label={'website'} />
+				</div>
+				<div id="stage" className={classNames({ hide: state.stage })}>
+					<div id="player">
+						<Svg href="#logo-svg" />
+						<Link href={'/home/'} label={'visit website'} />
+						<iframe
+							src={`https://www.youtube.com/embed/${state.concert.link}`}
+							frameBorder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowFullScreen
+							title="concert"
+						/>
+						<div>
+							<h1>{state.concert.title}</h1>
+							<p>{state.concert.description}</p>
 						</div>
-						<div id="stage" className="hide">
-							<div id="player">
-								<Svg href={'#logo-svg'} />
-								<Link href={'/home/'} label={'visit website'} />
-								<iframe
-									src={'https://www.youtube.com/embed/' + this.state.concert.link}
-									frameBorder="0"
-									allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-									allowFullScreen
-									title="concert"
-								/>
-								<div>
-									<h1>{this.state.concert.title}</h1>
-									<p>{this.state.concert.description}</p>
-								</div>
-							</div>
-							<div id="chat">
-								<div className="comment-list">
-									<div>
-										{this.state.comments.map((item, i) => {
-											return (
-												<div className="comment" key={i}>
-													<div className="profile">
-														<img src={'../media/users/' + item.photo} alt={item.name} />
-													</div>
-													<div>
-														<p>{item.comment}</p>
-														<span className="info">
-															{item.name} - {item.date}
-														</span>
-													</div>
-												</div>
-											);
-										})}
+					</div>
+					<div id="chat">
+						<div className="comment-list">
+							<div>
+								{comments.map(item => <div className="comment" key={item.id}>
+									<div className="profile">
+										<img src={'media/users/' + item.photo} alt={item.name} />
 									</div>
-								</div>
-								<form onSubmit={this.sendComment}>
-									<input type="text" name="my-comment" id="my-comment" />
-									<Button type={'button'} size={1} label={'add comment'} />
-								</form>
+									<div>
+										<p>{item.comment}</p>
+										<span className="info">
+											{item.name} - {item.date}
+										</span>
+									</div>
+								</div>)}
 							</div>
 						</div>
-					</section>
-				</main>
-				<Footer />
-			</div>
-		);
-	}
-}
-
-export default Arena;
+						<form onSubmit={sendComment}>
+							<input type="text" name="my-comment" id="my-comment" value={state.comment} onChange={onChange} />
+							<Button size={1}>Add comment</Button>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</div>;
+};

@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from '../components/Header';
-import Background from '../components/Background';
-import Slide from '../components/Slide';
-import ConcertDetail from '../components/ConcertDetail';
-import Footer from '../components/Footer';
-import Config from '../config';
+import Header from 'components/Header';
+import Background from 'components/Background';
+import Slide from 'components/Slide';
+import ConcertDetail from 'components/ConcertDetail';
+import Footer from 'components/Footer';
+import { api_url } from 'config';
 import styles from 'assets/css/Misc.module.css';
 
 class Concert extends React.Component {
@@ -26,7 +26,7 @@ class Concert extends React.Component {
 	}
 
 	getConcert() {
-		fetch(Config.api_url + 'getConcert.php?id=' + this.state.concertId)
+		fetch(api_url + 'getConcert.php?id=' + this.state.concertId)
 			.then((response) => {
 				return response.json();
 			})
@@ -37,7 +37,7 @@ class Concert extends React.Component {
 	}
 
 	getPriceList() {
-		fetch(Config.api_url + 'getPriceList.php?id=' + this.state.concertId)
+		fetch(api_url + 'getPriceList.php?id=' + this.state.concertId)
 			.then((response) => {
 				return response.json();
 			})

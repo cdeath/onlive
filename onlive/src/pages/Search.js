@@ -1,9 +1,9 @@
 import React from 'react';
-import Config from '../config';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Card from '../components/Card';
-import Svg from '../components/Svg';
+import { api_url } from 'config';
+import Header from 'components/Header';
+import Footer from 'components/Footer';
+import Card from 'components/Card';
+import Svg from 'components/Svg';
 import styles from 'assets/css/Search.module.css';
 
 class Checkout extends React.Component {
@@ -25,9 +25,9 @@ class Checkout extends React.Component {
 		// get search terms from form
 		var terms = document.querySelector('#search-field').value;
 
-		fetch(Config.api_url + 'search.php?query=' + terms)
+		fetch(api_url + 'search.php?query=' + terms)
 			.then((response) => {
-				console.warn(Config.api_url + 'search.php?query=');
+				console.warn(api_url + 'search.php?query=');
 				return response.json();
 			})
 			.then((json) => {

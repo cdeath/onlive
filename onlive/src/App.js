@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Intro from './pages/Intro';
-import Home from './pages/Home';
-import Concert from './pages/Concert';
-import Checkout from './pages/Checkout';
-import Search from './pages/Search';
-import About from './pages/About';
-import Arena from './pages/Arena';
-import Config from './config';
+import Intro from 'pages/Intro';
+import Home from 'pages/Home';
+import Concert from 'pages/Concert';
+import Checkout from 'pages/Checkout';
+import Search from 'pages/Search';
+import About from 'pages/About';
+import Arena from 'pages/Arena';
+import { api_url } from 'config';
 
 class App extends React.Component {
 	constructor(props) {
@@ -25,7 +25,7 @@ class App extends React.Component {
 	}
 
 	getConcerts() {
-		fetch(Config.api_url + '/getConcerts.php')
+		fetch(api_url + '/getConcerts.php')
 			.then((response) => {
 				return response.json();
 			})
@@ -35,7 +35,7 @@ class App extends React.Component {
 	}
 
 	getSlides() {
-		fetch(Config.api_url + '/getConcerts.php?highlight=1')
+		fetch(api_url + '/getConcerts.php?highlight=1')
 			.then((response) => {
 				return response.json();
 			})

@@ -1,7 +1,7 @@
 import React from 'react';
-import Button from '../components/Button';
-import Link from '../components/Link';
-import Svg from '../components/Svg';
+import Button from 'components/Button';
+import Link from 'components/Link';
+import Svg from 'components/Svg';
 import styles from 'assets/css/Intro.module.css';
 
 class Intro extends React.Component {

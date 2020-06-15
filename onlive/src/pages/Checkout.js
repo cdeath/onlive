@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from '../components/Header';
-import Background from '../components/Background';
-import Slide from '../components/Slide';
-import Cart from '../components/Cart';
-import Footer from '../components/Footer';
-import Config from '../config';
+import Header from 'components/Header';
+import Background from 'components/Background';
+import Slide from 'components/Slide';
+import Cart from 'components/Cart';
+import Footer from 'components/Footer';
+import { api_url } from 'config';
 import styles from 'assets/css/Misc.module.css';
 
 class Checkout extends React.Component {
@@ -22,7 +22,7 @@ class Checkout extends React.Component {
 	}
 
 	getConcert() {
-		fetch(Config.api_url + 'getConcert.php?id=' + this.state.concertId)
+		fetch(api_url + 'getConcert.php?id=' + this.state.concertId)
 			.then((response) => {
 				return response.json();
 			})
